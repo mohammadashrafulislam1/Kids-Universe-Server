@@ -40,6 +40,12 @@ async function run() {
       .toArray();
       res.send(result)
     })
+    // Post Toys:
+    app.post('/toys', async(req, res)=>{
+      const newToy = req.body;
+      const result = await toysCollection.insertOne(newToy)
+      res.send(result)
+    })
     // Read DATA: Toys
     app.get('/toys', async(req, res)=>{
         const cursor = toysCollection.find();
