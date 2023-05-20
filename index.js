@@ -24,6 +24,22 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     const toysCollection = client.db('Kids-Universe-DB').collection('toys')
+
+    const indexKey= {name: 1, category: 1};
+    const indexOptions= {name: "nameCategory"};
+    const result = await toysCollection.createIndex(indexKey, indexOptions);
+
+    app.get('/jobSearchByTitle/:text', async(req, res)=>{
+      const searchText = req.params.text;
+      const result = await toysCollection.find({
+        $or: [
+          {title:{ $regex: searchText, $options: "i"}},
+          {category:{ $regex: searchText, $options: "i"}}
+        ]
+      })
+      .toArray();
+      res.send(result)
+    })
     // Read DATA: Toys
     app.get('/toys', async(req, res)=>{
         const cursor = toysCollection.find();
@@ -41,6 +57,13 @@ async function run() {
       const id = req.params.id;
       const query ={_id: new ObjectId(id)};
       const result = await toysCollection.findOne(query);
+      res.send(result)
+    })
+
+    // Find Data by Email
+    app.get('/my/:email', async(req, res)=>{
+      console.log(req.params.email)
+      const result = await toysCollection.find({category: req.params.email}).toArray();
       res.send(result)
     })
     
