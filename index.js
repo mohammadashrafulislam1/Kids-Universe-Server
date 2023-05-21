@@ -71,8 +71,7 @@ async function run() {
     })
     // Find Data by Email
     app.get('/my/:email', async(req, res)=>{
-      console.log(req.params.email)
-      const result = await toysCollection.find({category: req.params.email}).toArray();
+      const result = await toysCollection.find({sellerEmail: req.params.email}).toArray();
       res.send(result)
     })
     
