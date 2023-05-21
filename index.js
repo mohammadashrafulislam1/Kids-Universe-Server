@@ -46,7 +46,7 @@ async function run() {
     // Read DATA: Toys
     app.get('/toys', async(req, res)=>{
         const cursor = toysCollection.find();
-        const result = await cursor.toArray()
+        const result = await cursor.limit(20).toArray()
         res.send(result)
     })
     
@@ -101,8 +101,12 @@ async function run() {
           details: updatedToy.details
         }
       }
-      const result = await toysCollection.updateOne(toy, options)
+      const result = await toysCollection.updateOne(filter, toy, options)
       res.send(result)
+    })
+    // sorting
+    app.get('/ascending', async(req, res)=>{
+
     })
     // delete toy from db
     app.delete('/toys/:id', async(req, res)=>{
